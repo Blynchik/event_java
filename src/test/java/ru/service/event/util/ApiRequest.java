@@ -19,7 +19,7 @@ public class ApiRequest {
 
     public static ResultActions createCustomEvent(MockMvc mockMvc, String requestAsString, String token) throws Exception {
         MockHttpServletRequestBuilder createRequest = MockMvcRequestBuilders
-                .post("/api/admin/event")
+                .post("/api/event/admin")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(requestAsString)
                 .header("Authorization", "Bearer " + token);

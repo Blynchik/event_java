@@ -1,4 +1,4 @@
-package ru.service.event.dto.event.response.create;
+package ru.service.event.dto.event.response;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -10,19 +10,19 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 @Data
-public class EventResponseForCreate {
+public class EventResponse {
 
     private Long id;
     private String title;
     private String description;
-    private List<DecisionResponseWithResultForCreate> decisions;
+    private List<DecisionResponse> decisions;
 
-    public EventResponseForCreate(Event event) {
+    public EventResponse(Event event) {
         this.id = event.getId();
         this.title = event.getTitle();
         this.description = event.getDescription();
         this.decisions = event.getDecisions().stream()
-                .map(DecisionResponseWithResultForCreate::new)
+                .map(DecisionResponse::new)
                 .toList();
     }
 }

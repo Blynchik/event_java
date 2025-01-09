@@ -5,8 +5,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.validation.BindingResult;
 import ru.service.event.dto.event.request.EventRequest;
-import ru.service.event.dto.event.response.common.EventResponse;
-import ru.service.event.dto.event.response.create.EventResponseForCreate;
+import ru.service.event.dto.event.response.EventResponse;
 import ru.service.event.model.Decision;
 import ru.service.event.model.Event;
 import ru.service.event.service.EventService;
@@ -35,8 +34,8 @@ public class EventFacade {
         return new EventResponse(event);
     }
 
-    public EventResponseForCreate create(EventRequest eventRequest,
-                                         BindingResult bindingResult) {
+    public EventResponse create(EventRequest eventRequest,
+                                BindingResult bindingResult) {
         log.info("Creating new event: {}", eventRequest.getTitle());
         eventValidator.validate(eventRequest, bindingResult);
         Event eventToSave = new Event(eventRequest);
@@ -50,6 +49,6 @@ public class EventFacade {
                 .toList();
         eventToSave.setDecisions(decisionsToSave);
         Event createdEvent = eventService.create(eventToSave);
-        return new EventResponseForCreate(createdEvent);
+        return new EventResponse(createdEvent);
     }
 }

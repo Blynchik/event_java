@@ -10,13 +10,12 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import ru.service.event.config.security.JwtUser;
 import ru.service.event.dto.event.request.EventRequest;
-import ru.service.event.dto.event.response.common.EventResponse;
-import ru.service.event.dto.event.response.create.EventResponseForCreate;
+import ru.service.event.dto.event.response.EventResponse;
 import ru.service.event.facade.EventFacade;
 
 @RestController
 @Slf4j
-@RequestMapping("/api")
+@RequestMapping("/api/event")
 public class EventController {
 
     private final EventFacade eventFacade;
@@ -26,19 +25,19 @@ public class EventController {
         this.eventFacade = eventFacade;
     }
 
-    @GetMapping("/event/random")
+    @GetMapping("/random")
     public ResponseEntity<EventResponse> getRandom(@AuthenticationPrincipal JwtUser jwtUser) {
         log.info("Request to GET /api/event/random from: {}", jwtUser.getLogin());
         EventResponse eventResponse = this.eventFacade.getRandomEvent();
         return ResponseEntity.ok(eventResponse);
     }
 
-    @PostMapping("/admin/event")
-    public ResponseEntity<EventResponseForCreate> create(@AuthenticationPrincipal JwtUser jwtUser,
-                                                         @Valid @RequestBody EventRequest eventRequest,
-                                                         BindingResult bindingResult) {
-        log.info("Request to POST /api/event/admin/create from: {}", jwtUser.getLogin());
-        EventResponseForCreate eventResponse = this.eventFacade.create(eventRequest, bindingResult);
+    @PostMapping("/admin")
+    public ResponseEntity<EventResponse> create(@AuthenticationPrincipal JwtUser jwtUser,
+                                                @Valid @RequestBody EventRequest eventRequest,
+                                                BindingResult bindingResult) {
+        log.info("Request to POST /api/event/admin from: {}", jwtUser.getLogin());
+        EventResponse eventResponse = this.eventFacade.create(eventRequest, bindingResult);
         return ResponseEntity.status(HttpStatus.CREATED).body(eventResponse);
     }
 }

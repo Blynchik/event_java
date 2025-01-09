@@ -19,9 +19,8 @@ import org.springframework.transaction.annotation.Transactional;
 import ru.service.event.dto.event.request.DecisionRequest;
 import ru.service.event.dto.event.request.DecisionResultRequest;
 import ru.service.event.dto.event.request.EventRequest;
-import ru.service.event.dto.event.response.common.EventResponse;
-import ru.service.event.dto.event.response.create.DecisionResponseWithResultForCreate;
-import ru.service.event.dto.event.response.create.EventResponseForCreate;
+import ru.service.event.dto.event.response.DecisionResponse;
+import ru.service.event.dto.event.response.EventResponse;
 import ru.service.event.model.DecisionType;
 
 import java.util.*;
@@ -65,7 +64,7 @@ public class EventControllerTest {
         }
 
         @ParameterizedTest
-        @ValueSource(strings = {"/api/admin/event"})
+        @ValueSource(strings = {"/api/event/admin"})
         @Description("Тесты на авторизацию")
         void authorizationTest(String url) throws Exception {
             //given
@@ -92,7 +91,7 @@ public class EventControllerTest {
         }
 
         @ParameterizedTest
-        @ValueSource(strings = {"/api/event", "/api/admin/event"})
+        @ValueSource(strings = {"/api/event", "/api/event/admin"})
         @Description("Тесты на аутентификацию")
         void authTest(String url) throws Exception {
             //given
@@ -149,11 +148,11 @@ public class EventControllerTest {
                             jsonPath("$.description").value(eventRequest.getDescription()))
                     .andReturn().getResponse().getContentAsString();
 
-            EventResponseForCreate response = convertJsonToObject(objectMapper, responseAsString, EventResponseForCreate.class);
+            EventResponse response = convertJsonToObject(objectMapper, responseAsString, EventResponse.class);
 
             boolean hasFirst = false;
             boolean hasText = false;
-            for (DecisionResponseWithResultForCreate decision : response.getDecisions()) {
+            for (DecisionResponse decision : response.getDecisions()) {
                 if (decision.getDecisionType().equals(DecisionType.valueOf(eventRequest.getDecisions().get(0).getDecisionType())) &&
                         decision.getDecisionDescr().equals(eventRequest.getDecisions().get(0).getDescription()) &&
                         decision.getDifficulty().equals(eventRequest.getDecisions().get(0).getDifficulty()) &&
@@ -170,7 +169,7 @@ public class EventControllerTest {
             }
             assertTrue(hasFirst);
 
-            for (DecisionResponseWithResultForCreate decision : response.getDecisions()) {
+            for (DecisionResponse decision : response.getDecisions()) {
                 if (decision.getDecisionType().equals(DecisionType.valueOf(eventRequest.getDecisions().get(2).getDecisionType())) &&
                         decision.getDecisionDescr().equals(eventRequest.getDecisions().get(2).getDescription()) &&
                         decision.getDifficulty().equals(eventRequest.getDecisions().get(2).getDifficulty()) &&
@@ -386,7 +385,7 @@ public class EventControllerTest {
                             .andExpect(
                                     status().isCreated())
                             .andReturn().getResponse().getContentAsString(),
-                    EventResponseForCreate.class).getDecisions().size());
+                    EventResponse.class).getDecisions().size());
         }
 
         @Test
@@ -546,7 +545,7 @@ public class EventControllerTest {
                             .andExpect(
                                     status().isCreated())
                             .andReturn().getResponse().getContentAsString(),
-                    EventResponseForCreate.class).getDecisions().get(0).getDecisionLog());
+                    EventResponse.class).getDecisions().get(0).getDecisionLog());
         }
 
         @Test

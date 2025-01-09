@@ -1,4 +1,4 @@
-package ru.service.event.dto.event.response.create;
+package ru.service.event.dto.event.response;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -11,24 +11,26 @@ import java.util.Map;
 @AllArgsConstructor
 @NoArgsConstructor
 @Data
-public class DecisionResponseWithResultForCreate {
+public class DecisionResponse {
 
+    private Long id;
     private DecisionType decisionType;
     private String decisionDescr;
     private Integer difficulty;
     private String decisionLog;
     private String eventTitle;
-    private Map<Boolean, DecisionResultResponseForCreate> results;
+    private Map<Boolean, DecisionResultResponse> results;
 
-    public DecisionResponseWithResultForCreate(Decision decision) {
+    public DecisionResponse(Decision decision) {
+        this.id = decision.getId();
         this.decisionType = decision.getDecisionType();
         this.decisionDescr = decision.getDescription();
         this.difficulty = decision.getDifficulty();
         this.decisionLog = decision.getDecisionLog();
         this.eventTitle = decision.getEvent().getTitle();
         results = Map.of(
-                true, new DecisionResultResponseForCreate(decision.getResults().get(true).getResultDescr()),
-                false, new DecisionResultResponseForCreate(decision.getResults().get(false).getResultDescr())
+                true, new DecisionResultResponse(decision.getResults().get(true).getResultDescr()),
+                false, new DecisionResultResponse(decision.getResults().get(false).getResultDescr())
         );
     }
 }
